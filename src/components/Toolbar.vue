@@ -16,24 +16,32 @@
           class="pa-0 selectColor"
         />
 
-        <v-btn icon>
+        <v-btn icon @click="missingAlert">
           <v-icon>mdi-invert-colors</v-icon>
         </v-btn>
-        <v-btn icon>
+        <v-btn icon @click="missingAlert">
           <v-icon>mdi-check-circle</v-icon>
         </v-btn>
-        <v-btn href="/" icon>
+        <v-btn href="/" icon @click="goHome">
           <v-icon>mdi-delete-circle</v-icon>
         </v-btn>
 
         <v-toolbar-items>
-          <v-btn href="/" icon>
+          <v-btn href="/" icon @click="goHome">
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <v-btn text href="/about">About</v-btn>
+          <v-btn href="/about" icon>
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
         </v-toolbar-items>
       </template>
     </v-toolbar>
+    <v-snackbar v-model="snackbar" :timeout="3000">
+      {{ snackbarText }}
+      <v-btn color="pink" text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -46,6 +54,8 @@ export default {
   data() {
     return {
       items: ["Wall", "Window", "CW"],
+      snackbar: false,
+      snackbarText: "Test",
       elementSelected: null,
       drawer: null,
       address: null
@@ -67,12 +77,19 @@ export default {
   },
   watch: {
     color(val) {
+      this.snackbarText = "Elemented Changed";
+      this.snackbar = true;
       store.commit("setColor", val);
     }
   },
   methods: {
-    toggleNavDrawer() {
-      this.drawer = !this.drawer;
+    goHome() {
+      this.snackbarText = "Drawing Cleared, Going Home";
+      this.snackbar = true;
+    },
+    missingAlert() {
+      this.snackbarText = "Not Yet Implemented! :(";
+      this.snackbar = true;
     }
   }
 };

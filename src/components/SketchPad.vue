@@ -16,7 +16,7 @@
 
           <line
             v-for="item in lines"
-            :key="item[0].x"
+            :key="item[0].x + item[1].y + item[0].y + item[1].x"
             class="element-positive"
             :stroke="item[0].color"
             :x1="item[0].x"
@@ -59,7 +59,8 @@ export default {
       return store.getters.color;
     },
     lines() {
-      return this.chunk(this.dataSet, 2);
+      const chunked = this.chunk(this.dataSet, 2);
+      return chunked.filter(list => list.length > 1);
     }
   },
   mounted() {
