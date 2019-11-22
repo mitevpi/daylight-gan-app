@@ -2,15 +2,17 @@
   <div id="container" class="svg-container" align="center">
     <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
       <g>
-        <rect
-          v-for="item in dataSet"
-          :key="item.x"
-          fill="green"
-          :x="item.x"
-          :y="item.y"
-          :width="50"
-          :height="50"
-        />
+        <transition-group name="fade" tag="g">
+          <rect
+            v-for="item in dataSet"
+            :key="item.x"
+            class="bar-positive"
+            :x="item.x"
+            :y="item.y"
+            :width="50"
+            :height="50"
+          />
+        </transition-group>
       </g>
     </svg>
   </div>
@@ -22,7 +24,7 @@
 // import { transition } from "d3-transition";
 
 export default {
-  name: "HelloWorld",
+  name: "SketchPad",
   props: {
     msg: String
   },
@@ -44,7 +46,6 @@ export default {
     this.svg = this.$refs.svg;
     this.svg.addEventListener("mousemove", e => {
       const dim = e.target.getBoundingClientRect();
-      // console.log(e.clientX, e.clientY); // log the mouse x,y position
       this.mouseX = e.clientX - dim.left;
       this.mouseY = e.clientY - dim.top;
     });
@@ -72,5 +73,12 @@ export default {
   padding-bottom: 1%;
   vertical-align: top;
   overflow: hidden;
+}
+
+.fade-enter-active {
+  transition: opacity 0.25s;
+}
+.fade-enter {
+  opacity: 0;
 }
 </style>
