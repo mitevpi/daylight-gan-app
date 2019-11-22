@@ -1,16 +1,29 @@
 <template>
   <div id="app">
     <v-app>
-      <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-      </div>
+      <toolbar id="nav" />
       <transition name="fade">
         <router-view />
       </transition>
     </v-app>
   </div>
 </template>
+
+<script>
+import Toolbar from "./components/Toolbar.vue";
+
+export default {
+  name: "App",
+  components: {
+    Toolbar
+  },
+  data() {
+    return {
+      //
+    };
+  }
+};
+</script>
 
 <style>
 #app {
@@ -19,19 +32,11 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: white;
 }
 
 #nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  margin-bottom: 50px;
 }
 
 .fade-enter-active,

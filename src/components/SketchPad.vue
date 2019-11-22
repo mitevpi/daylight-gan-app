@@ -1,5 +1,5 @@
 <template>
-  <div id="container" class="svg-container" align="center">
+  <div id="container" class="svg-container">
     <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
       <g>
         <transition-group name="fade" tag="g">
@@ -29,7 +29,7 @@ export default {
     msg: String
   },
   data: () => ({
-    dataSet: [{ x: 0, y: 0 }],
+    dataSet: [],
     svgWidth: 0,
     redrawToggle: true,
     svg: null,
@@ -59,6 +59,19 @@ export default {
 </script>
 
 <style scoped>
+/* #container {
+  outline: 2px dashed;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
+} */
+svg {
+  outline: 1px dashed;
+  display: block;
+  margin: auto;
+}
+
 .bar-positive {
   fill: steelblue;
   transition: r 0.2s ease-in-out;
