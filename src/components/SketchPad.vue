@@ -6,6 +6,7 @@
           <rect
             v-for="item in dataSet"
             :key="item.x"
+            :fill="item.color"
             class="bar-positive"
             :x="item.x"
             :y="item.y"
@@ -19,6 +20,8 @@
 </template>
 
 <script>
+import store from "../store";
+
 // import { scaleLinear, scaleBand } from "d3-scale";
 // import { event } from "d3-selection";
 // import { transition } from "d3-transition";
@@ -39,6 +42,9 @@ export default {
   computed: {
     svgHeight() {
       return this.svgWidth / 1.61803398875; // golden ratio
+    },
+    color() {
+      return store.getters.color;
     }
   },
   mounted() {
@@ -51,7 +57,7 @@ export default {
     });
 
     this.svg.addEventListener("click", () => {
-      this.dataSet.push({ x: this.mouseX, y: this.mouseY });
+      this.dataSet.push({ x: this.mouseX, y: this.mouseY, color: this.color });
     });
   },
   methods: {}
@@ -73,11 +79,10 @@ svg {
 }
 
 .bar-positive {
-  fill: steelblue;
   transition: r 0.2s ease-in-out;
 }
 .bar-positive:hover {
-  fill: brown;
+  fill: steelblue;
 }
 .svg-container {
   display: inline-block;

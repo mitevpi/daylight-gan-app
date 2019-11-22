@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import SketchPad from "../components/SketchPad.vue";
 
 export default {

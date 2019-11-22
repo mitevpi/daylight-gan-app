@@ -4,8 +4,19 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    color: "#FFFFFF"
+  },
+  mutations: {
+    setColor(state, payload) {
+      state.color = payload;
+    }
+  },
   actions: {},
-  modules: {}
+  modules: {},
+  getters: {
+    color(state) {
+      return state.color;
+    }
+  }
 });
