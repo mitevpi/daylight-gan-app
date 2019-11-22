@@ -1,19 +1,16 @@
-<img src="https://cdn.auth0.com/blog/vuejs/vue-logo.png" alt="Vue.js" width="100"/>
+<img src="https://img.icons8.com/dusk/344/artificial-intelligence.png" alt="logo" width="100"/>
 
-# Vue Starter Template
+# Daylight GAN App
 
-A Vue.js 3.0 full project starter template including best practices for code styling, testing, and building. Also incorporates the (soon to be released) [Composition API](https://vue-composition-api-rfc.netlify.com/).
+A frontend application to utilize the [Daylight GAN Model](https://github.com/TheodoreGalanos/DaylightGAN) created by Theodore Galanos. This application creates images of floor plans which can be used by the trained GAN to "predict" daylight analysis based on the plan typologies recognized.
 
-## Usage
+<iframe src='https://gfycat.com/ifr/GaseousPastelChinchilla' frameborder='0' scrolling='no' allowfullscreen width='640' height='473'></iframe>
 
-Fork, download, or clone this repository and use it as a starting point for your next Vue.js project.
+![AppDemo](https://thumbs.gfycat.com/GaseousPastelChinchilla-size_restricted.gif)
 
-## Added/Updated Configurations to Vue CLI Starter
+## Development
 
-1. [AirBnB Style Guide](https://github.com/airbnb/javascript)
-2. [Prettier Style Guide](https://prettier.io/)
-3. [Jest (Unit Testing)](https://jestjs.io/)
-4. [ESLint (Style Enforcing)](https://eslint.org/)
+Fork, download, or clone this repository to get it up and running using the `vue cli` and `npm`.
 
 ## Commands
 
@@ -22,4 +19,3 @@ The following commands are used to develop the project:
 1. `npm run build` - Build the package distribution bundle.
 2. `npm run serve` - Start a development server with live-reloading on changes. (Used for previewing individual components.)
 3. `npm run lint` - Lint code using ESLint and Vue, AirBnB, and Prettier configs.
-4. `npm run test:unit` - Run unit tests for the individual components in the package.
