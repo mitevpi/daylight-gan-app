@@ -13,7 +13,7 @@
           :items="items"
           label="Element"
           hide-details
-          class="pa-0 selectColor"
+          class="pa-0 selectColor noselect"
         />
 
         <v-btn icon @click="missingAlert">
