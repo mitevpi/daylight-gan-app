@@ -11,6 +11,7 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "vue/require-v-for-key": "warn",
     "no-param-reassign": "off",
     "no-console": "off",
     "prettier/prettier": "warn",

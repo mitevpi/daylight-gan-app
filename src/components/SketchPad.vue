@@ -1,17 +1,28 @@
 <template>
   <div id="container" class="svg-container">
     <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
-      <g>
+      <g v-if="lines.length > 0">
         <transition-group name="fade" tag="g">
-          <rect
+          <!-- <rect
             v-for="item in dataSet"
             :key="item.x"
             :fill="item.color"
-            class="bar-positive"
+            class="element-positive"
             :x="item.x"
             :y="item.y"
             :width="50"
             :height="50"
+          /> -->
+
+          <line
+            v-for="item in lines"
+            :key="item[0].x"
+            class="element-positive"
+            :stroke="item[0].color"
+            :x1="item[0].x"
+            :y1="item[0].y"
+            :x2="item[1].x"
+            :y2="item[1].y"
           />
         </transition-group>
       </g>
@@ -37,7 +48,8 @@ export default {
     redrawToggle: true,
     svg: null,
     mouseX: null,
-    mouseY: null
+    mouseY: null,
+    clientOffsetDim: null
   }),
   computed: {
     svgHeight() {
@@ -45,22 +57,36 @@ export default {
     },
     color() {
       return store.getters.color;
+    },
+    lines() {
+      return this.chunk(this.dataSet, 2);
     }
   },
   mounted() {
     this.svgWidth = document.getElementById("container").offsetWidth * 0.75;
     this.svg = this.$refs.svg;
-    this.svg.addEventListener("mousemove", e => {
-      const dim = e.target.getBoundingClientRect();
-      this.mouseX = e.clientX - dim.left;
-      this.mouseY = e.clientY - dim.top;
-    });
+    // this.svg.addEventListener("mousemove", e => {
+    //   // temp
+    // });
 
-    this.svg.addEventListener("click", () => {
+    this.svg.addEventListener("click", e => {
+      this.clientOffsetDim =
+        this.clientOffsetDim == null ? e.target.getBoundingClientRect() : this.clientOffsetDim;
+      this.mouseX = e.clientX - this.clientOffsetDim.left;
+      this.mouseY = e.clientY - this.clientOffsetDim.top;
       this.dataSet.push({ x: this.mouseX, y: this.mouseY, color: this.color });
     });
   },
-  methods: {}
+  methods: {
+    chunk(array, size) {
+      if (!array) return [];
+      const firstChunk = array.slice(0, size); // create the first chunk of the given array
+      if (!firstChunk.length) {
+        return array; // this is the base case to terminal the recursive
+      }
+      return [firstChunk].concat(this.chunk(array.slice(size, array.length), size));
+    }
+  }
 };
 </script>
 
@@ -76,10 +102,11 @@ svg {
   margin: auto;
 }
 
-.bar-positive {
+.element-positive {
+  stroke-width: 10px;
   transition: r 0.2s ease-in-out;
 }
-.bar-positive:hover {
+.element-positive:hover {
   fill: steelblue;
 }
 .svg-container {
