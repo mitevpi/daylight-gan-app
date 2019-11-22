@@ -4,8 +4,6 @@
 
 A frontend application to utilize the [Daylight GAN Model](https://github.com/TheodoreGalanos/DaylightGAN) created by Theodore Galanos. This application creates images of floor plans which can be used by the trained GAN to "predict" daylight analysis based on the plan typologies recognized.
 
-<iframe src='https://gfycat.com/ifr/GaseousPastelChinchilla' frameborder='0' scrolling='no' allowfullscreen width='640' height='473'></iframe>
-
 ![AppDemo](https://thumbs.gfycat.com/GaseousPastelChinchilla-size_restricted.gif)
 
 ## Development
