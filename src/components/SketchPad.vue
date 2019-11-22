@@ -41,7 +41,7 @@ export default {
   }),
   computed: {
     svgHeight() {
-      return this.svgWidth / 1.61803398875; // golden ratio
+      return this.svgWidth / 1.61803398875;
     },
     color() {
       return store.getters.color;
@@ -67,12 +67,10 @@ export default {
 <style scoped>
 /* #container {
   outline: 2px dashed;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  height: 100%;
 } */
 svg {
+  outline-offset: -4px;
+
   outline: 1px dashed;
   display: block;
   margin: auto;
@@ -88,8 +86,8 @@ svg {
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 1%;
-  vertical-align: top;
+  /* padding-bottom: 1%; */
+  vertical-align: center;
   overflow: hidden;
 }
 

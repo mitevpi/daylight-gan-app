@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    color: "#FFFFFF"
+    color: "#000000"
   },
   mutations: {
     setColor(state, payload) {
