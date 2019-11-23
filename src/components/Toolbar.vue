@@ -9,33 +9,41 @@
         <!-- <v-select v-model="elementSelected" :items="items" label="Element" /> -->
 
         <!-- DRAWING CONTROLS -->
-        <transition name="fade">
-          <v-overflow-btn
-            v-if="page === 'Sketch'"
-            v-model="elementSelected"
-            :items="items"
-            label="Element"
-            hide-details
-            class="pa-0 selectColor noselect"
-          />
-        </transition>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on: menu }">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: tooltip }">
+                <v-btn icon v-on="{ ...tooltip, ...menu }">
+                  <v-icon>fas fa-building</v-icon>
+                </v-btn>
+              </template>
+              <span>Pick Building Element</span>
+            </v-tooltip>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              @click="elementSelected = item"
+            >
+              <v-list-item-title>{{ item }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
 
         <v-btn icon @click="missingAlert">
-          <v-icon>mdi-invert-colors</v-icon>
-        </v-btn>
-        <v-btn icon @click="missingAlert">
-          <v-icon>mdi-check-circle</v-icon>
+          <v-icon>fas fa-check-circle</v-icon>
         </v-btn>
         <v-btn icon @click="goHome">
-          <v-icon>mdi-delete-circle</v-icon>
+          <v-icon>fas fa-trash-alt</v-icon>
         </v-btn>
 
         <v-toolbar-items>
           <v-btn icon @click="goHome">
-            <v-icon>mdi-home</v-icon>
+            <v-icon>fas fa-home</v-icon>
           </v-btn>
           <v-btn icon @click="goAbout">
-            <v-icon>mdi-help</v-icon>
+            <v-icon>fas fa-question-circle</v-icon>
           </v-btn>
         </v-toolbar-items>
       </template>
