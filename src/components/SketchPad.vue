@@ -1,19 +1,9 @@
 <template>
   <div id="container" class="svg-container">
     <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
+      <!-- drawn lines -->
       <g v-if="lines.length > 0">
         <transition-group name="fade" tag="g">
-          <!-- <rect
-            v-for="item in dataSet"
-            :key="item.x"
-            :fill="item.color"
-            class="element-positive"
-            :x="item.x"
-            :y="item.y"
-            :width="50"
-            :height="50"
-          /> -->
-
           <line
             v-for="item in lines"
             :key="item[0].x + item[1].y + item[0].y + item[1].x"
@@ -139,7 +129,7 @@ svg {
 }
 
 .fade-enter-active {
-  transition: opacity 0.25s;
+  transition: opacity 0.5s;
 }
 .fade-enter {
   opacity: 0;
