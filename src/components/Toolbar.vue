@@ -1,14 +1,13 @@
 <template>
   <div>
     <v-toolbar flat dense>
-      <v-toolbar-title>Daylight GAN</v-toolbar-title>
+      <v-toolbar-title>Daylight <strong>GAN</strong></v-toolbar-title>
 
       <v-spacer />
 
       <template v-if="$vuetify.breakpoint.smAndUp">
-        <!-- <v-select v-model="elementSelected" :items="items" label="Element" /> -->
-
         <!-- DRAWING CONTROLS -->
+        <!-- SELECT ELEMENT BUTTON -->
         <v-menu offset-y>
           <template v-slot:activator="{ on: menu }">
             <v-tooltip bottom>
@@ -31,12 +30,25 @@
           </v-list>
         </v-menu>
 
-        <v-btn icon @click="missingAlert">
-          <v-icon>fas fa-check-circle</v-icon>
-        </v-btn>
-        <v-btn icon @click="goHome">
-          <v-icon>fas fa-trash-alt</v-icon>
-        </v-btn>
+        <!-- SENT TO ANALYSIS BUTTON -->
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on: tooltip }">
+            <v-btn icon v-on="{ ...tooltip }" @click="missingAlert">
+              <v-icon>fas fa-check-circle</v-icon>
+            </v-btn>
+          </template>
+          <span>Send For Analysis</span>
+        </v-tooltip>
+
+        <!-- TRASH BUTTON -->
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on: tooltip }">
+            <v-btn icon href="/" v-on="{ ...tooltip }" @click="goHome">
+              <v-icon>fas fa-trash-alt</v-icon>
+            </v-btn>
+          </template>
+          <span>Delete Drawing</span>
+        </v-tooltip>
 
         <v-toolbar-items>
           <v-btn icon @click="goHome">
@@ -66,7 +78,7 @@ export default {
   components: {},
   data() {
     return {
-      items: ["Wall", "Window", "CW"],
+      items: ["Wall", "Window", "CW", "Door"],
       snackbar: false,
       snackbarText: "Test",
       elementSelected: null,
@@ -81,9 +93,11 @@ export default {
         case "Wall":
           return "#000000";
         case "Window":
-          return "#f5b800";
+          return "#ef9b15";
         case "CW":
-          return "#f5b800";
+          return "#ea2700";
+        case "Door":
+          return "#4b6aa9";
         default:
           return "#000000";
       }
@@ -105,6 +119,7 @@ export default {
       this.page = "Sketch";
       this.snackbar = true;
       router.push({ path: "/" });
+      // this.$forceUpdate();
     },
     goAbout() {
       this.page = "About";

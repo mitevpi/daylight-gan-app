@@ -26,16 +26,29 @@
           />
         </transition-group>
       </g>
+      <!-- ghostline -->
+      <g>
+        <line
+          v-if="lastClick.length > 0"
+          class="element-ghost"
+          :stroke="color"
+          :x1="lastClick[0]"
+          :y1="lastClick[1]"
+          :x2="mouseX"
+          :y2="mouseY"
+        />
+      </g>
+
+      <!-- ghostcursor -->
+      <g>
+        <circle :cx="mouseX" :cy="mouseY" r="4" :fill="color" />
+      </g>
     </svg>
   </div>
 </template>
 
 <script>
 import store from "../store";
-
-// import { scaleLinear, scaleBand } from "d3-scale";
-// import { event } from "d3-selection";
-// import { transition } from "d3-transition";
 
 export default {
   name: "SketchPad",
@@ -49,6 +62,7 @@ export default {
     svg: null,
     mouseX: null,
     mouseY: null,
+    lastClick: [],
     clientOffsetDim: null
   }),
   computed: {
@@ -66,16 +80,16 @@ export default {
   mounted() {
     this.svgWidth = document.getElementById("container").offsetWidth * 0.75;
     this.svg = this.$refs.svg;
-    // this.svg.addEventListener("mousemove", e => {
-    //   // temp
-    // });
-
-    this.svg.addEventListener("click", e => {
+    this.svg.addEventListener("mousemove", e => {
       this.clientOffsetDim =
         this.clientOffsetDim == null ? e.target.getBoundingClientRect() : this.clientOffsetDim;
       this.mouseX = e.clientX - this.clientOffsetDim.left;
       this.mouseY = e.clientY - this.clientOffsetDim.top;
+    });
+
+    this.svg.addEventListener("click", () => {
       this.dataSet.push({ x: this.mouseX, y: this.mouseY, color: this.color });
+      this.lastClick = this.lastClick.length > 0 ? [] : [this.mouseX, this.mouseY];
     });
   },
   methods: {
@@ -109,6 +123,11 @@ svg {
 }
 .element-positive:hover {
   fill: steelblue;
+}
+.element-ghost {
+  stroke-width: 3px;
+  stroke-dasharray: 4;
+  transition: r 0.2s ease-in-out;
 }
 .svg-container {
   display: inline-block;
