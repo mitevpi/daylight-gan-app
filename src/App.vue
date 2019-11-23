@@ -5,17 +5,20 @@
       <transition name="fade">
         <router-view />
       </transition>
+      <bottom-bar />
     </v-app>
   </div>
 </template>
 
 <script>
 import Toolbar from "./components/Toolbar.vue";
+import BottomBar from "./components/BottomBar.vue";
 
 export default {
   name: "App",
   components: {
-    Toolbar
+    Toolbar,
+    BottomBar
   },
   data() {
     return {
@@ -33,6 +36,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   background-color: white;
+  overflow: hidden;
+  display: block;
+  position: relative;
 }
 
 #nav {
