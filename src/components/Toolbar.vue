@@ -8,13 +8,17 @@
       <template v-if="$vuetify.breakpoint.smAndUp">
         <!-- <v-select v-model="elementSelected" :items="items" label="Element" /> -->
 
-        <v-overflow-btn
-          v-model="elementSelected"
-          :items="items"
-          label="Element"
-          hide-details
-          class="pa-0 selectColor noselect"
-        />
+        <!-- DRAWING CONTROLS -->
+        <transition name="fade">
+          <v-overflow-btn
+            v-if="page === 'Sketch'"
+            v-model="elementSelected"
+            :items="items"
+            label="Element"
+            hide-details
+            class="pa-0 selectColor noselect"
+          />
+        </transition>
 
         <v-btn icon @click="missingAlert">
           <v-icon>mdi-invert-colors</v-icon>
@@ -22,15 +26,15 @@
         <v-btn icon @click="missingAlert">
           <v-icon>mdi-check-circle</v-icon>
         </v-btn>
-        <v-btn href="/" icon @click="goHome">
+        <v-btn icon @click="goHome">
           <v-icon>mdi-delete-circle</v-icon>
         </v-btn>
 
         <v-toolbar-items>
-          <v-btn href="/" icon @click="goHome">
+          <v-btn icon @click="goHome">
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <v-btn href="/about" icon>
+          <v-btn icon @click="goAbout">
             <v-icon>mdi-help</v-icon>
           </v-btn>
         </v-toolbar-items>
@@ -47,6 +51,7 @@
 
 <script>
 import store from "../store";
+import router from "../router";
 
 export default {
   name: "Toolbar",
@@ -58,7 +63,8 @@ export default {
       snackbarText: "Test",
       elementSelected: null,
       drawer: null,
-      address: null
+      address: null,
+      page: "Sketch"
     };
   },
   computed: {
@@ -80,12 +86,21 @@ export default {
       this.snackbarText = "Elemented Changed";
       this.snackbar = true;
       store.commit("setColor", val);
+    },
+    page(val) {
+      store.commit("setPage", val);
     }
   },
   methods: {
     goHome() {
       this.snackbarText = "Drawing Cleared, Going Home";
+      this.page = "Sketch";
       this.snackbar = true;
+      router.push({ path: "/" });
+    },
+    goAbout() {
+      this.page = "About";
+      router.push({ path: "/about" });
     },
     missingAlert() {
       this.snackbarText = "Not Yet Implemented! :(";

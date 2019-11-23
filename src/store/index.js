@@ -5,11 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    color: "#000000"
+    color: "#000000",
+    page: "Sketch"
   },
   mutations: {
     setColor(state, payload) {
       state.color = payload;
+    },
+    setPage(state, payload) {
+      state.page = payload;
     }
   },
   actions: {},
@@ -17,6 +21,9 @@ export default new Vuex.Store({
   getters: {
     color(state) {
       return state.color;
+    },
+    page(state) {
+      return state.page;
     }
   }
 });
