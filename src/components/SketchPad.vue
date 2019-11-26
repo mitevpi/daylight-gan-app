@@ -2,6 +2,7 @@
   <div id="container" class="svg-container">
     <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
       <!-- drawn lines -->
+      <g><rect width="100%" height="100%" fill="white" /></g>
       <g v-if="lines.length > 0">
         <transition-group name="fade" tag="g">
           <line
@@ -38,9 +39,8 @@
     <v-btn style="margin: 30px" @click="predict">RUN</v-btn>
 
     <div class="results">
-      <img width="256" height="256" />
-
       <canvas ref="canvas" width="256" height="256" />
+      <img v-if="result !== null" ref="result" width="256" height="256" :src="result" />
     </div>
   </div>
 </template>
@@ -65,7 +65,8 @@ export default {
     clientOffsetDim: null,
     pix2pix: null,
     model: null,
-    modelReady: false
+    modelReady: false,
+    result: null
   }),
   computed: {
     svgHeight() {
@@ -81,13 +82,6 @@ export default {
   },
   mounted() {
     const self = this;
-    // function modelLoaded() {
-    //   // Show 'Model Loaded!' message
-    //   console.log("Model Loaded!");
-
-    //   // Set modelReady to true
-    //   self.modelReady = true;
-    // }
     this.pix2pix = ml5.pix2pix("models/plantoDaylight.pict").then(model => {
       console.log(model);
       self.model = model;
@@ -124,14 +118,14 @@ export default {
           console.log(err);
         }
         if (result && result.src) {
-          console.log(result.src);
-          document.querySelector("img").src = result.src;
+          this.result = result.src;
+          this.$refs.result.src = result.src;
         }
       });
     },
     mirrorCanvas() {
       const svg = document.querySelector("svg");
-      const img = document.querySelector("img");
+      // const img = document.querySelector("img");
       const canvas = document.querySelector("canvas");
       const xml = new XMLSerializer().serializeToString(svg);
 
@@ -143,9 +137,27 @@ export default {
       const image64 = b64Start + svg64;
 
       // set it as the source of the img element
-      img.src = image64;
-      img.onload = () => {
-        canvas.getContext("2d").drawImage(img, 0, 0);
+      // img.src = image64;
+      const img2 = new Image();
+      img2.src = image64;
+      // img.src = "images/inputPlan2.png";
+
+      // const self = this;
+      img2.onload = () => {
+        canvas.getContext("2d").fillStyle = "white";
+        canvas.getContext("2d").drawImage(
+          img2,
+          0,
+          0,
+          img2.width,
+          img2.height, // source rectangle
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        ); // destination rectangle
+        // const canvasdata = canvas.toDataURL("image/png", 1);
+        // console.log(canvasdata);
       };
     }
   }
@@ -153,12 +165,8 @@ export default {
 </script>
 
 <style scoped>
-/* #container {
-  outline: 2px dashed;
-} */
 svg {
   outline-offset: -4px;
-
   outline: 1px dashed;
   display: block;
   margin: auto;
