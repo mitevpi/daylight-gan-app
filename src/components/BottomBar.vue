@@ -4,13 +4,13 @@
       <!-- connect icons -->
       <v-flex xs12 shrink>
         <v-btn ma-0 pa-0 text icon color="gray" @click="openTwitter">
-          <v-icon ma-0 pa-0 size="20px">mdi-twitter</v-icon>
+          <v-icon ma-0 pa-0 size="20px">fab fa-twitter</v-icon>
         </v-btn>
         <v-btn ma-0 pa-0 text icon color="gray" @click="openLinkedIn">
-          <v-icon ma-0 pa-0 size="20px">mdi-linkedin-box</v-icon>
+          <v-icon ma-0 pa-0 size="20px">fab fa-linkedin</v-icon>
         </v-btn>
         <v-btn ma-0 pa-0 text icon color="gray" @click="openGitHub">
-          <v-icon ma-0 pa-0 size="20px">mdi-github-circle</v-icon>
+          <v-icon ma-0 pa-0 size="20px">fab fa-github</v-icon>
         </v-btn>
       </v-flex>
     </v-layout>

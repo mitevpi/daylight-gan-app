@@ -9,6 +9,7 @@
             :key="item[0].x + item[1].y + item[0].y + item[1].x"
             class="element-positive"
             :stroke="item[0].color"
+            stroke-width="3"
             :x1="item[0].x"
             :y1="item[0].y"
             :x2="item[1].x"
@@ -34,6 +35,13 @@
         <circle :cx="mouseX" :cy="mouseY" r="4" :fill="color" />
       </g>
     </svg>
+    <v-btn style="margin: 30px" @click="predict">RUN</v-btn>
+
+    <div class="results">
+      <img width="256" height="256" />
+
+      <canvas ref="canvas" width="256" height="256" />
+    </div>
   </div>
 </template>
 
@@ -47,13 +55,17 @@ export default {
   },
   data: () => ({
     dataSet: [],
+    canvas: null,
     svgWidth: 0,
     redrawToggle: true,
     svg: null,
     mouseX: null,
     mouseY: null,
     lastClick: [],
-    clientOffsetDim: null
+    clientOffsetDim: null,
+    pix2pix: null,
+    model: null,
+    modelReady: false
   }),
   computed: {
     svgHeight() {
@@ -68,7 +80,19 @@ export default {
     }
   },
   mounted() {
-    this.svgWidth = document.getElementById("container").offsetWidth * 0.75;
+    const self = this;
+    // function modelLoaded() {
+    //   // Show 'Model Loaded!' message
+    //   console.log("Model Loaded!");
+
+    //   // Set modelReady to true
+    //   self.modelReady = true;
+    // }
+    this.pix2pix = ml5.pix2pix("models/plantoDaylight.pict").then(model => {
+      console.log(model);
+      self.model = model;
+    });
+    this.svgWidth = document.getElementById("container").offsetWidth * 0.55;
     this.svg = this.$refs.svg;
     this.svg.addEventListener("mousemove", e => {
       this.clientOffsetDim =
@@ -80,6 +104,7 @@ export default {
     this.svg.addEventListener("click", () => {
       this.dataSet.push({ x: this.mouseX, y: this.mouseY, color: this.color });
       this.lastClick = this.lastClick.length > 0 ? [] : [this.mouseX, this.mouseY];
+      this.mirrorCanvas();
     });
   },
   methods: {
@@ -90,6 +115,38 @@ export default {
         return array; // this is the base case to terminal the recursive
       }
       return [firstChunk].concat(this.chunk(array.slice(size, array.length), size));
+    },
+    predict() {
+      // const canvas = document.querySelector("canvas");
+
+      this.model.transfer(this.$refs.canvas, (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+        if (result && result.src) {
+          console.log(result.src);
+          document.querySelector("img").src = result.src;
+        }
+      });
+    },
+    mirrorCanvas() {
+      const svg = document.querySelector("svg");
+      const img = document.querySelector("img");
+      const canvas = document.querySelector("canvas");
+      const xml = new XMLSerializer().serializeToString(svg);
+
+      // make it base64
+      const svg64 = btoa(xml);
+      const b64Start = "data:image/svg+xml;base64,";
+
+      // prepend a "header"
+      const image64 = b64Start + svg64;
+
+      // set it as the source of the img element
+      img.src = image64;
+      img.onload = () => {
+        canvas.getContext("2d").drawImage(img, 0, 0);
+      };
     }
   }
 };
@@ -105,6 +162,10 @@ svg {
   outline: 1px dashed;
   display: block;
   margin: auto;
+}
+
+.results {
+  margin-bottom: 40px;
 }
 
 .element-positive {

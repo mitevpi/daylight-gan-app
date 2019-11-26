@@ -39,6 +39,10 @@
       "dest": "/favicon.ico"
     },
     {
+      "src": "^/models/planToDaylight.pict$",
+      "dest": "/models/planToDaylight.pict"
+    },
+    {
       "src": "^/robots.txt$",
       "dest": "/robots.txt"
     },

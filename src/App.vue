@@ -42,7 +42,7 @@ export default {
 }
 
 #nav {
-  margin-bottom: 50px;
+  margin-bottom: 25px;
 }
 
 .fade-enter-active,

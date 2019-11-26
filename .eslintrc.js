@@ -11,6 +11,8 @@ module.exports = {
     "eslint:recommended"
   ],
   rules: {
+    "no-undef": "warn",
+    "no-unused-vars": "warn",
     "vue/require-v-for-key": "warn",
     "no-param-reassign": "off",
     "no-console": "off",
