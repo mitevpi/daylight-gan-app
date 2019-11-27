@@ -47,14 +47,19 @@
         <canvas v-show="result === null" ref="canvas" width="512" height="512" />
         <img
           v-show="result !== null"
-          class="noselect"
           ref="result"
+          class="noselect"
           width="512"
           height="512"
           :src="result"
-        >
+        />
         <!-- </transition> -->
       </v-col>
+    </v-row>
+    <v-row style="margin-top: 20px" no-gutters>
+      <transition name="fade">
+        <results v-if="result !== null" :data="dataSet" :imagePath="result" />
+      </transition>
     </v-row>
   </v-container>
 </template>
@@ -64,6 +69,9 @@ import store from "../store";
 
 export default {
   name: "SketchPad",
+  components: {
+    Results: () => import("./Results.vue")
+  },
   props: {
     msg: String
   },
