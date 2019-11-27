@@ -103,7 +103,7 @@ export default {
   },
   mounted() {
     const self = this;
-    ml5.pix2pix("models/plantoDaylight.pict").then(model => {
+    ml5.pix2pix("models/planToDaylight.pict").then(model => {
       self.model = model;
     });
 

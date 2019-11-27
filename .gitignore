@@ -2,6 +2,9 @@
 node_modules
 dist/js
 dist/css
+dist/models
+dist/images
+dist/img
 
 # local env files
 .env.local
