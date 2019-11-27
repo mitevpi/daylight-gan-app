@@ -28,6 +28,13 @@
       "dest": "/css/$1"
     },
     {
+      "src": "^/models/(.*)",
+      "headers": {
+        "cache-control": "max-age=31536000,immutable"
+      },
+      "dest": "/models/$1"
+    },
+    {
       "src": "^/img/(.*)",
       "headers": {
         "cache-control": "max-age=31536000,immutable"

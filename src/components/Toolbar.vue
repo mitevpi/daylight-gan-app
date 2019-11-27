@@ -107,9 +107,6 @@ export default {
     }
   },
   watch: {
-    // readyForAnalysis(val) {
-    //   store.commit("setAnalysisReady", val);
-    // },
     color(val) {
       this.snackbarText = "Elemented Changed";
       this.snackbar = true;
@@ -137,7 +134,6 @@ export default {
       this.page = "Sketch";
       this.snackbar = true;
       router.push({ path: "/" });
-      // this.$forceUpdate();
     },
     goAbout() {
       this.page = "About";
@@ -152,7 +148,6 @@ export default {
         default:
           break;
       }
-      // this.readyForAnalysis = false;
     },
     missingAlert() {
       this.snackbarText = "Not Yet Implemented! :(";

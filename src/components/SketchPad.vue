@@ -43,17 +43,8 @@
       </v-col>
 
       <v-col justify="center" align="center">
-        <img ref="result" width="256" height="256" :src="result" />
-      </v-col>
-    </v-row>
-    <!-- <v-row no-gutters>
-      <v-col>
-        <v-btn style="margin: 30px" @click="predict">RUN</v-btn>
-      </v-col>
-    </v-row> -->
-    <v-row no-gutters>
-      <v-col>
-        <canvas ref="canvas" style="visibility: hidden" width="256" height="256" />
+        <canvas ref="canvas" width="256" height="256" />
+        <img class="noselect" ref="result" width="256" height="256" :src="result" />
       </v-col>
     </v-row>
   </v-container>
@@ -196,13 +187,13 @@ svg {
   margin: auto;
 }
 
-img {
+/* img {
   display: none;
 }
 
 img[src] {
   display: block;
-}
+} */
 
 .element-positive {
   stroke-width: 10px;
