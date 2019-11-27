@@ -44,8 +44,15 @@
 
       <v-col justify="center" align="center">
         <!-- <transition name="fade"> -->
-        <canvas v-if="result === null" ref="canvas" width="256" height="256" />
-        <img v-else class="noselect" ref="result" width="256" height="256" :src="result" />
+        <canvas v-show="result === null" ref="canvas" width="512" height="512" />
+        <img
+          v-show="result !== null"
+          class="noselect"
+          ref="result"
+          width="512"
+          height="512"
+          :src="result"
+        >
         <!-- </transition> -->
       </v-col>
     </v-row>
@@ -194,14 +201,6 @@ svg {
   margin: auto;
 }
 
-/* img {
-  display: none;
-}
-
-img[src] {
-  display: block;
-} */
-
 .element-positive {
   stroke-width: 10px;
   transition: r 0.2s ease-in-out;
@@ -218,7 +217,6 @@ img[src] {
   display: inline-block;
   position: relative;
   width: 100%;
-  /* padding-bottom: 1%; */
   vertical-align: center;
   overflow: hidden;
 }
