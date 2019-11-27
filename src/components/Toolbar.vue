@@ -33,7 +33,7 @@
         <!-- SENT TO ANALYSIS BUTTON -->
         <v-tooltip bottom>
           <template v-slot:activator="{ on: tooltip }">
-            <v-btn icon v-on="{ ...tooltip }" @click="missingAlert">
+            <v-btn icon v-on="{ ...tooltip }" @click="analyze">
               <v-icon>fas fa-check-circle</v-icon>
             </v-btn>
           </template>
@@ -82,9 +82,9 @@ export default {
       snackbar: false,
       snackbarText: "Test",
       elementSelected: null,
-      drawer: null,
       address: null,
-      page: "Sketch"
+      page: "Sketch",
+      // readyForAnalysis: false
     };
   },
   computed: {
@@ -101,13 +101,31 @@ export default {
         default:
           return "#000000";
       }
+    },
+    modelReady() {
+      return store.getters.modelReady;
     }
   },
   watch: {
+    // readyForAnalysis(val) {
+    //   store.commit("setAnalysisReady", val);
+    // },
     color(val) {
       this.snackbarText = "Elemented Changed";
       this.snackbar = true;
       store.commit("setColor", val);
+    },
+    modelReady(val) {
+      switch (val) {
+        case true:
+          this.snackbarText = "Model Loaded";
+          this.snackbar = true;
+          break;
+        default:
+          this.snackbarText = "Model Could Not Load!";
+          this.snackbar = true;
+          break;
+      }
     },
     page(val) {
       store.commit("setPage", val);
@@ -124,6 +142,17 @@ export default {
     goAbout() {
       this.page = "About";
       router.push({ path: "/about" });
+    },
+    analyze() {
+      switch (this.modelReady) {
+        case true:
+          // this.readyForAnalysis = true;
+          store.commit("setAnalysisReady", true);
+          break;
+        default:
+          break;
+      }
+      // this.readyForAnalysis = false;
     },
     missingAlert() {
       this.snackbarText = "Not Yet Implemented! :(";

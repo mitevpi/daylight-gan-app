@@ -1,48 +1,62 @@
 <template>
-  <div id="container" class="svg-container">
-    <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
-      <!-- drawn lines -->
-      <g><rect width="100%" height="100%" fill="white" /></g>
-      <g v-if="lines.length > 0">
-        <transition-group name="fade" tag="g">
-          <line
-            v-for="item in lines"
-            :key="item[0].x + item[1].y + item[0].y + item[1].x"
-            class="element-positive"
-            :stroke="item[0].color"
-            stroke-width="3"
-            :x1="item[0].x"
-            :y1="item[0].y"
-            :x2="item[1].x"
-            :y2="item[1].y"
-          />
-        </transition-group>
-      </g>
-      <!-- ghostline -->
-      <g>
-        <line
-          v-if="lastClick.length > 0"
-          class="element-ghost"
-          :stroke="color"
-          :x1="lastClick[0]"
-          :y1="lastClick[1]"
-          :x2="mouseX"
-          :y2="mouseY"
-        />
-      </g>
+  <v-container align-center justify-center>
+    <v-row no-gutters justify="center" align="center">
+      <v-col>
+        <div id="container">
+          <svg v-if="redrawToggle === true" ref="svg" :width="svgWidth" :height="svgHeight">
+            <!-- drawn lines -->
+            <g><rect width="100%" height="100%" fill="white" /></g>
+            <g v-if="lines.length > 0">
+              <transition-group name="fade" tag="g">
+                <line
+                  v-for="item in lines"
+                  :key="item[0].x + item[1].y + item[0].y + item[1].x"
+                  class="element-positive"
+                  :stroke="item[0].color"
+                  stroke-width="3"
+                  :x1="item[0].x"
+                  :y1="item[0].y"
+                  :x2="item[1].x"
+                  :y2="item[1].y"
+                />
+              </transition-group>
+            </g>
+            <!-- ghostline -->
+            <g>
+              <line
+                v-if="lastClick.length > 0"
+                class="element-ghost"
+                :stroke="color"
+                :x1="lastClick[0]"
+                :y1="lastClick[1]"
+                :x2="mouseX"
+                :y2="mouseY"
+              />
+            </g>
 
-      <!-- ghostcursor -->
-      <g>
-        <circle :cx="mouseX" :cy="mouseY" r="4" :fill="color" />
-      </g>
-    </svg>
-    <v-btn style="margin: 30px" @click="predict">RUN</v-btn>
+            <!-- ghostcursor -->
+            <g>
+              <circle :cx="mouseX" :cy="mouseY" r="4" :fill="color" />
+            </g>
+          </svg>
+        </div>
+      </v-col>
 
-    <div class="results">
-      <canvas ref="canvas" width="256" height="256" />
-      <img v-if="result !== null" ref="result" width="256" height="256" :src="result" />
-    </div>
-  </div>
+      <v-col justify="center" align="center">
+        <img ref="result" width="256" height="256" :src="result" />
+      </v-col>
+    </v-row>
+    <!-- <v-row no-gutters>
+      <v-col>
+        <v-btn style="margin: 30px" @click="predict">RUN</v-btn>
+      </v-col>
+    </v-row> -->
+    <v-row no-gutters>
+      <v-col>
+        <canvas ref="canvas" style="visibility: hidden" width="256" height="256" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -58,44 +72,60 @@ export default {
     canvas: null,
     svgWidth: 0,
     redrawToggle: true,
-    svg: null,
     mouseX: null,
     mouseY: null,
     lastClick: [],
     clientOffsetDim: null,
-    pix2pix: null,
     model: null,
     modelReady: false,
     result: null
   }),
   computed: {
     svgHeight() {
-      return this.svgWidth / 1.61803398875;
+      // return this.svgWidth / 1.61803398875;
+      return this.svgWidth;
     },
     color() {
       return store.getters.color;
+    },
+    analysisReady() {
+      return store.getters.analysisReady;
     },
     lines() {
       const chunked = this.chunk(this.dataSet, 2);
       return chunked.filter(list => list.length > 1);
     }
   },
+  watch: {
+    model() {
+      store.commit("setModelReady", true);
+    },
+    analysisReady(val) {
+      if (val === true) {
+        console.log(val);
+        this.predict();
+        store.commit("setAnalysisReady", false);
+      } else {
+        //
+      }
+    }
+  },
   mounted() {
     const self = this;
-    this.pix2pix = ml5.pix2pix("models/plantoDaylight.pict").then(model => {
-      console.log(model);
+    ml5.pix2pix("models/plantoDaylight.pict").then(model => {
       self.model = model;
     });
-    this.svgWidth = document.getElementById("container").offsetWidth * 0.55;
-    this.svg = this.$refs.svg;
-    this.svg.addEventListener("mousemove", e => {
+
+    // svg width
+    this.svgWidth = document.getElementById("container").offsetWidth;
+    this.$refs.svg.addEventListener("mousemove", e => {
       this.clientOffsetDim =
         this.clientOffsetDim == null ? e.target.getBoundingClientRect() : this.clientOffsetDim;
       this.mouseX = e.clientX - this.clientOffsetDim.left;
       this.mouseY = e.clientY - this.clientOffsetDim.top;
     });
 
-    this.svg.addEventListener("click", () => {
+    this.$refs.svg.addEventListener("click", () => {
       this.dataSet.push({ x: this.mouseX, y: this.mouseY, color: this.color });
       this.lastClick = this.lastClick.length > 0 ? [] : [this.mouseX, this.mouseY];
       this.mirrorCanvas();
@@ -111,8 +141,6 @@ export default {
       return [firstChunk].concat(this.chunk(array.slice(size, array.length), size));
     },
     predict() {
-      // const canvas = document.querySelector("canvas");
-
       this.model.transfer(this.$refs.canvas, (err, result) => {
         if (err) {
           console.log(err);
@@ -125,7 +153,6 @@ export default {
     },
     mirrorCanvas() {
       const svg = document.querySelector("svg");
-      // const img = document.querySelector("img");
       const canvas = document.querySelector("canvas");
       const xml = new XMLSerializer().serializeToString(svg);
 
@@ -137,10 +164,8 @@ export default {
       const image64 = b64Start + svg64;
 
       // set it as the source of the img element
-      // img.src = image64;
       const img2 = new Image();
       img2.src = image64;
-      // img.src = "images/inputPlan2.png";
 
       // const self = this;
       img2.onload = () => {
@@ -155,9 +180,8 @@ export default {
           0,
           canvas.width,
           canvas.height
-        ); // destination rectangle
+        );
         // const canvasdata = canvas.toDataURL("image/png", 1);
-        // console.log(canvasdata);
       };
     }
   }
@@ -172,8 +196,12 @@ svg {
   margin: auto;
 }
 
-.results {
-  margin-bottom: 40px;
+img {
+  display: none;
+}
+
+img[src] {
+  display: block;
 }
 
 .element-positive {

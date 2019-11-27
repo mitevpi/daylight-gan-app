@@ -6,7 +6,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     color: "#000000",
-    page: "Sketch"
+    page: "Sketch",
+    modelReady: false,
+    analysisReady: false
   },
   mutations: {
     setColor(state, payload) {
@@ -14,6 +16,12 @@ export default new Vuex.Store({
     },
     setPage(state, payload) {
       state.page = payload;
+    },
+    setModelReady(state, payload) {
+      state.modelReady = payload;
+    },
+    setAnalysisReady(state, payload) {
+      state.analysisReady = payload;
     }
   },
   actions: {},
@@ -24,6 +32,12 @@ export default new Vuex.Store({
     },
     page(state) {
       return state.page;
+    },
+    modelReady(state) {
+      return state.modelReady;
+    },
+    analysisReady(state) {
+      return state.analysisReady;
     }
   }
 });
