@@ -7,7 +7,7 @@
             <!-- drawn lines -->
             <g><rect width="100%" height="100%" fill="white" /></g>
             <g v-if="lines.length > 0">
-              <transition-group name="fade" tag="g">
+              <transition-group name="fadeLine" tag="g">
                 <line
                   v-for="item in lines"
                   :key="item[0].x + item[1].y + item[0].y + item[1].x"
@@ -43,8 +43,10 @@
       </v-col>
 
       <v-col justify="center" align="center">
-        <canvas ref="canvas" width="256" height="256" />
-        <img class="noselect" ref="result" width="256" height="256" :src="result" />
+        <!-- <transition name="fade"> -->
+        <canvas v-if="result === null" ref="canvas" width="256" height="256" />
+        <img v-else class="noselect" ref="result" width="256" height="256" :src="result" />
+        <!-- </transition> -->
       </v-col>
     </v-row>
   </v-container>
@@ -103,9 +105,14 @@ export default {
   },
   mounted() {
     const self = this;
-    ml5.pix2pix("models/planToDaylight.pict").then(model => {
-      self.model = model;
-    });
+    ml5
+      .pix2pix("models/planToDaylight.pict")
+      .then(model => {
+        self.model = model;
+      })
+      .catch(err => {
+        console.error(error);
+      });
 
     // svg width
     this.svgWidth = document.getElementById("container").offsetWidth;
@@ -216,10 +223,10 @@ img[src] {
   overflow: hidden;
 }
 
-.fade-enter-active {
+.fadeLine-enter-active {
   transition: opacity 0.5s;
 }
-.fade-enter {
+.fadeLine-enter {
   opacity: 0;
 }
 </style>
